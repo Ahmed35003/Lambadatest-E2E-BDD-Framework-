@@ -1,0 +1,9 @@
+{
+  "baseUrl"                : "https://ecommerce-playground.lambdatest.io/",
+  "browser"                : "chrome",
+  "headless"               : false,
+  "implicitWaitSeconds"    : 10,
+  "explicitWaitSeconds"    : 20,
+  "pageLoadTimeoutSeconds" : 30,
+  "screenshotOnFailure"    : true
+}

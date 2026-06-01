@@ -1,0 +1,25 @@
+{
+  "invalidCredentials": [
+    {
+      "email"       : "wrongpassword.user@testdomain.com",
+      "password"    : "W0ngP@ssw0rd!",
+      "scenario"    : "valid_email_format_wrong_password"
+    },
+    {
+      "email"       : "not-a-valid-email-format",
+      "password"    : "Test@12345",
+      "scenario"    : "malformed_email_format"
+    }
+  ],
+  "checkoutAddress": {
+    "address1"  : "221B Baker Street",
+    "city"      : "London",
+    "postcode"  : "NW1 6XE",
+    "country"   : "United Kingdom"
+  },
+  "searchKeywords": {
+    "validKeyword"   : "iPhone",
+    "anotherKeyword" : "MacBook",
+    "invalidKeyword" : "xyzabcnonexistentproduct999"
+  }
+}
