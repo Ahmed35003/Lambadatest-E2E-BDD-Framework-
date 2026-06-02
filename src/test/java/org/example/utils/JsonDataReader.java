@@ -12,12 +12,14 @@ public class JsonDataReader {
 
     private JsonDataReader() {
         try {
+
             InputStream stream = getClass()
                     .getClassLoader()
-                    .getResourceAsStream("data/Users.json");
+                    .getResourceAsStream("testData/testUsers.json");
+
             if (stream == null) {
                 throw new IllegalStateException(
-                        "Users.json not found — expected at src/test/resources/data/Users.json");
+                        "testUsers.json not found — expected at src/test/resources/testData/testUsers.json");
             }
             root = new ObjectMapper().readTree(stream);
         } catch (Exception e) {

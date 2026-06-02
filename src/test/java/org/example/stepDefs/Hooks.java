@@ -14,6 +14,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.PageLoadStrategy;
 
 import java.time.Duration;
 
@@ -26,37 +27,32 @@ public class Hooks {
         this.ctx = ctx;
     }
 
-    /**
-     * Order 0 — runs first among all @Before hooks.
-     * all step definitions receive the same driver instance.
-     */
     @Before(order = 0)
     public void setUp() {
         WebDriver driver = buildDriver();
+
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getImplicitWait()));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(config.getPageLoadTimeout()));
-        driver.manage().window().maximize();
+
         ctx.setDriver(driver);
     }
 
-    /**
-     * Order 0 — runs last among all @After hooks.
-     * Attaches a failure screenshot to the Allure/Cucumber report before quitting.
-     */
     @After(order = 0)
     public void tearDown(Scenario scenario) {
         WebDriver driver = ctx.getDriver();
         if (driver == null) return;
 
-        if (scenario.isFailed() && config.isScreenshotOnFailure()) {
-            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.attach(screenshot, "image/png",
-                    "Failure Screenshot — " + scenario.getName());
+        try {
+            if (scenario.isFailed() && config.isScreenshotOnFailure()) {
+                byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                scenario.attach(screenshot, "image/png", "Failure Screenshot — " + scenario.getName());
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Failed to take screenshot: " + e.getMessage());
+        } finally {
+            driver.quit();
         }
-        driver.quit();
     }
-
-    // ── Driver Factory — Java 22 switch expression ────────────────────
 
     private WebDriver buildDriver() {
         String  browser  = config.getBrowser().toLowerCase().trim();
@@ -64,27 +60,39 @@ public class Hooks {
 
         return switch (browser) {
             case "firefox" -> {
-                WebDriverManager.firefoxdriver().setup();
+                // WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions opts = new FirefoxOptions();
                 if (headless) opts.addArguments("--headless");
                 yield new FirefoxDriver(opts);
             }
             case "edge" -> {
-                WebDriverManager.edgedriver().setup();
                 EdgeOptions opts = new EdgeOptions();
+                opts.addArguments("--remote-allow-origins=*");
+                opts.addArguments("--no-sandbox");
+                opts.addArguments("--disable-dev-shm-usage");
+                opts.addArguments("--disable-gpu");
+
                 if (headless) opts.addArguments("--headless");
                 yield new EdgeDriver(opts);
             }
             default -> {
-                WebDriverManager.chromedriver().setup();
+                // WebDriverManager.chromedriver().setup();
                 ChromeOptions opts = new ChromeOptions();
+
+                opts.addArguments("--remote-allow-origins=*");
+                opts.addArguments("--no-sandbox");
+                opts.addArguments("--disable-dev-shm-usage");
+                opts.addArguments("--disable-gpu");
+                opts.addArguments("--disable-extensions");
+                opts.addArguments("--disable-software-rasterizer");
+                opts.addArguments("--start-maximized");
+
+                opts.addArguments("--window-size=1920,1080");
+
+                // opts.setPageLoadStrategy(PageLoadStrategy.EAGER);
+
                 if (headless) {
-                    opts.addArguments(
-                            "--headless=new",
-                            "--no-sandbox",
-                            "--disable-dev-shm-usage",
-                            "--window-size=1920,1080"
-                    );
+                    opts.addArguments("--headless=new");
                 }
                 yield new ChromeDriver(opts);
             }
