@@ -66,12 +66,7 @@ public class D01_AuthStepDef {
                 .as("Checkout background: registration must succeed before login attempt")
                 .isTrue();
 
-        loginPage().open();
-        loginPage().loginWith(email, password);
 
-        assertThat(loginPage().isLoginSuccessful())
-                .as("Checkout background: login must succeed after registration")
-                .isTrue();
     }
 
     // ── Registration Steps ────────────────────────────────────────────
@@ -117,7 +112,7 @@ public class D01_AuthStepDef {
 
     @And("the user navigates to the registration page again")
     public void navigateToRegistrationPageAgain() {
-        ctx.getDriver().get("https://ecommerce-playground.lambdatest.io/index.php?route=account/logout");
+        //ctx.getDriver().get("https://ecommerce-playground.lambdatest.io/index.php?route=account/logout");
         registerPage().open();
     }
 

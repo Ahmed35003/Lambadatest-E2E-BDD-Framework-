@@ -26,6 +26,7 @@ Feature: User Authentication
     And  the user fills the registration form with generated data
     And  the user agrees to the privacy policy
     And  the user submits the registration form
+    And  the user logs out
     And  the user navigates to the registration page again
     And  the user attempts to register with the same stored email
     Then a registration error message should be displayed
@@ -35,10 +36,8 @@ Feature: User Authentication
   #              Login step reads them directly from context
   @login @smoke
   Scenario: Registered user can log in with their generated credentials
-    When the user navigates to the registration page
-    And  the user fills the registration form with generated data
-    And  the user agrees to the privacy policy
-    And  the user submits the registration form
+    Given a new user registers and logs in
+    And  the user logs out
     When the user navigates to the login page
     And  the user logs in with the registered credentials
     Then the user account dashboard should be displayed
@@ -48,10 +47,8 @@ Feature: User Authentication
   #              Users.json invalidCredentials[0].password for the wrong password
   @login @negative
   Scenario: Login with a correct email but wrong password shows an error
-    When the user navigates to the registration page
-    And  the user fills the registration form with generated data
-    And  the user agrees to the privacy policy
-    And  the user submits the registration form
+    Given a new user registers and logs in
+    And  the user logs out
     When the user navigates to the login page
     And  the user logs in with the registered email but wrong password from test data
     Then the login error message should be displayed
@@ -68,12 +65,7 @@ Feature: User Authentication
   # Data source: TestDataGenerator → ScenarioContext
   @logout @smoke
   Scenario: Authenticated user can log out and is redirected to the home page
-    When the user navigates to the registration page
-    And  the user fills the registration form with generated data
-    And  the user agrees to the privacy policy
-    And  the user submits the registration form
-    When the user navigates to the login page
-    And  the user logs in with the registered credentials
+    Given a new user registers and logs in
     And  the user logs out
     When the user is on the home page
     Then the user should be redirected to the home page

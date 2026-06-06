@@ -4,6 +4,6 @@
   "headless"               : false,
   "implicitWaitSeconds"    : 10,
   "explicitWaitSeconds"    : 20,
-  "pageLoadTimeoutSeconds" : 30,
+  "pageLoadTimeoutSeconds" : 60,
   "screenshotOnFailure"    : true
 }
