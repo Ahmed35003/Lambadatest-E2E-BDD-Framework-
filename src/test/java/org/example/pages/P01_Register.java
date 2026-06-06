@@ -62,6 +62,7 @@ public class P01_Register extends BasePage{
     // ── Verifications ─────────────────────────────────────────────────
 
     public boolean isRegistrationSuccessful() {
+        waitForVisibility(SUCCESS_HEADING);
         return getText(SUCCESS_HEADING)
                 .toLowerCase()
                 .contains("your account has been created");
