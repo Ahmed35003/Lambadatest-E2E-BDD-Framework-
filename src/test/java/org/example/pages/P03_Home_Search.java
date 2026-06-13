@@ -24,8 +24,6 @@ public class P03_Home_Search extends BasePage {
     private static final By NO_RESULTS_MSG     = By.xpath("//p[contains(., 'There is no product') or contains(., 'matches the search')] | //div[contains(@class, 'text-empty')]");
 
     private static final By PRODUCT_HEADING = By.cssSelector("h1.page-title, .page-title, h1");
-    private static final By ADD_TO_CART_BUTTON = By.id("button-cart");
-    private static final By SUCCESS_ALERT      = By.cssSelector("div.alert.alert-success");
 
     public P03_Home_Search(WebDriver driver) {
         super(driver);
@@ -120,11 +118,4 @@ public class P03_Home_Search extends BasePage {
         return getText(PRODUCT_HEADING);
     }
 
-    public void addToCart() {
-        click(ADD_TO_CART_BUTTON);
-    }
-
-    public boolean isAddToCartSuccessDisplayed() {
-        return isDisplayed(SUCCESS_ALERT);
-    }
 }

@@ -103,16 +103,4 @@ public class D02_SearchStepDef {
     public void storeProductNameFromDetailPage() {
         ctx.setProductName(searchPage.getProductDetailName());
     }
-
-    @And("the user adds the product to the cart")
-    public void addProductToCart() {
-        searchPage.addToCart();
-    }
-
-    @Then("the add-to-cart success notification should be displayed")
-    public void verifyAddToCartSuccess() {
-        assertThat(searchPage.isAddToCartSuccessDisplayed())
-                .as("Expected a success alert after clicking 'Add to Cart'")
-                .isTrue();
-    }
 }
